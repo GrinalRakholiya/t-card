@@ -1,0 +1,2 @@
+# t-card
+project setup 

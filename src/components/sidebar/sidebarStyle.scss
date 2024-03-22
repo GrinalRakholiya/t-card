@@ -1,0 +1,42 @@
+.sidebar-main {
+  flex: 0 0 260px !important;
+  max-width: 260px !important;
+  min-width: 260px !important;
+  width: 260px !important;
+  .ant-menu-inline {
+    padding: 4px 16px;
+    border: 0 !important;
+    .ant-menu-item,
+    .ant-menu-submenu {
+      svg {
+        font-size: 18px !important;
+      }
+      .ant-menu-title-content {
+        font-weight: 500;
+      }
+    }
+    .ant-menu-item {
+      padding-left: 16px !important;
+    }
+    .ant-menu-item-selected {
+      background-color: var(--white) !important;
+    }
+  }
+  .ant-menu-light {
+    background: var(--primary-20) !important;
+  }
+}
+.sidebar-main.ant-layout-sider-collapsed {
+  flex: 0 0 80px !important;
+  max-width: 80px !important;
+  min-width: 80px !important;
+  width: 80px !important;
+  .ant-menu.ant-menu-root {
+    padding: 4px 10px;
+  }
+  .ant-menu-item {
+    svg {
+      font-size: 20px !important;
+    }
+  }
+}
