@@ -15,18 +15,18 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
   const sites = useSelector((state: AppState) => state.sites.sites);
   const [color, setColor] = useState<string>('');
   const [cardData, setCardData] = useState<CardComponentProps | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
+  const [isModalOpen, setIsModalOpen] = useState<string>(''); // State for both modals
   const [totalTime, setTotalTime] = useState<string>('');
   const [departmentTotalTime, setDepartmentTotalTime] = useState<string>('');
 
   const handleApprove = (cardDetails: CardComponentProps): void => {
-    setIsModalOpen(true);
+    setIsModalOpen('approve');
     setCardData(cardDetails);
   };
 
   const handleCardClick = (e): void => {
-    setIsModalOpen(true);
-    e.stopPropagation();
+    e.stopPropagation(); // Prevent propagation to the parent elements
+    setIsModalOpen('view'); // Open the modal
   };
 
   useEffect(() => {
@@ -57,8 +57,8 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
       working_days: vehicleSite?.working_days || 5,
     };
     const currentTime = calculate_end_time;
-    const totalDeaprtmentTime = calculateTime(currentTime, params);
-    setDepartmentTotalTime(totalDeaprtmentTime);
+    const totalDepartmentTime = calculateTime(currentTime, params);
+    setDepartmentTotalTime(totalDepartmentTime);
 
     // Calculate total time
     const totalTimeParams: TimeParams = {
@@ -68,34 +68,19 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
       working_days: vehicleSite?.working_days || 5,
     };
 
-    const totalProccessingTime = calculateTime(currentTime, totalTimeParams);
-    setTotalTime(totalProccessingTime);
+    const totalProcessingTime = calculateTime(currentTime, totalTimeParams);
+    setTotalTime(totalProcessingTime);
   }, [sites, cardDetails]);
 
   return (
     <>
       <Card
         className={`!p-0 ${color} ${cardDetails.status === 'PENDING-APPROVAL' && 'cursor-pointer'}`}
-        onClick={(e) => {
-          // Check if the click target is not the vehicle number
-          if (!e.target.closest('button')) {
-            // Only call handleApprove if the card status is 'PENDING-APPROVAL'
-            if (cardDetails.status === 'PENDING-APPROVAL') {
-              handleApprove({ cardDetails });
-            }
-          }
-        }}
+        onClick={() => (cardDetails.status === 'PENDING-APPROVAL' ? handleApprove({ cardDetails }) : undefined)}
       >
         <div className="card-body space-y-[2px]">
           <div className="flex items-center justify-between">
-            <button
-              type="button"
-              className="font-bold"
-              onClick={(e) => {
-                e.stopPropagation(); // Prevent event propagation
-                handleCardClick(e);
-              }}
-            >
+            <button type="button" className="font-bold" onClick={(e) => handleCardClick(e)}>
               {cardDetails.vehicle_number}
             </button>
           </div>
@@ -117,7 +102,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
           {cardDetails.department_waiting_time && (
             <div className="flex items-center justify-between flex-wrap">
               <h3 className="font-semibold capitalize">{`${
-                cardDetails.department_waiting_time ? 'waiting' : 'proccessing'
+                cardDetails.department_waiting_time ? 'waiting' : 'processing'
               } time:`}</h3>
               <p className="text-end font-medium text-gray-60">{departmentTotalTime}</p>
             </div>
@@ -130,10 +115,9 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
           )}
         </div>
       </Card>
-      {isModalOpen && !cardData && (
-        <VehicleViewModal viewData={cardDetails} isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} />
-      )}
-      {cardData && <CardApproveModal isModalOpen={isModalOpen} setIsModalOpen={setIsModalOpen} cardData={cardData} />}
+
+      <VehicleViewModal isModalOpen={isModalOpen === 'view'} setIsModalOpen={setIsModalOpen} viewData={cardDetails} />
+      <CardApproveModal isModalOpen={isModalOpen === 'approve'} setIsModalOpen={setIsModalOpen} cardData={cardData} />
     </>
   );
 };
