@@ -1,7 +1,9 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from 'antd';
 import moment from 'moment';
-import { FaKey } from 'react-icons/fa';
+import { FaKey } from 'react-icons/fa'; // Import FaEdit icon
+import { AiFillEdit } from 'react-icons/ai';
+
 import { calculateTime } from 'digital-tcard-utils';
 import type { TimeParams } from 'digital-tcard-utils';
 import './cardStyle.scss';
@@ -10,6 +12,7 @@ import { CardComponentProps } from './type.ts';
 import { AppState, useSelector } from '../../redux/store.ts';
 import { SitesInterface } from '../../pages/sites/type.ts';
 import VehicleViewModal from '../vehicleViewModal/index.tsx'; // Update the path accordingly
+import VehicleUpdateModel from '../vehicleUpdateModel/index.tsx';
 
 const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
   const sites = useSelector((state: AppState) => state.sites.sites);
@@ -27,6 +30,10 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
   const handleCardClick = (e): void => {
     e.stopPropagation(); // Prevent propagation to the parent elements
     setIsModalOpen('view'); // Open the modal
+  };
+  const handleVehicleUpdate = (cardDetails: CardComponentProps): void => {
+    setIsModalOpen('vehicleUpdate');
+    setCardData(cardDetails);
   };
 
   useEffect(() => {
@@ -83,6 +90,11 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
             <button type="button" className="font-bold" onClick={(e) => handleCardClick(e)}>
               {cardDetails.vehicle_number}
             </button>
+            {cardDetails.department_id === '0c91564d-4dfc-47f5-98ee-879b494376a8' && (
+              <button type="button" className="edit-button" onClick={() => handleVehicleUpdate({ cardDetails })}>
+                <AiFillEdit className="text-[20px]" />
+              </button>
+            )}
           </div>
           <div className="flex items-center justify-between">
             <h3 className="font-semibold">Key Tag:</h3>
@@ -117,6 +129,11 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
       </Card>
 
       <VehicleViewModal isModalOpen={isModalOpen === 'view'} setIsModalOpen={setIsModalOpen} viewData={cardDetails} />
+      <VehicleUpdateModel
+        isModalOpen={isModalOpen === 'vehicleUpdate'}
+        setIsModalOpen={setIsModalOpen}
+        viewData={cardDetails}
+      />
       <CardApproveModal isModalOpen={isModalOpen === 'approve'} setIsModalOpen={setIsModalOpen} cardData={cardData} />
     </>
   );
