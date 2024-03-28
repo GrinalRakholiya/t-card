@@ -76,8 +76,13 @@ const useLiveStatus = (): PropType => {
   if (departmentData) {
     const sortedDepartmentData = [...departmentData]; // Create a copy of departmentData
     sortedDepartmentData.sort((a, b) => a.sequence - b.sequence); // Sorting by sequence
+    // Print the sequence of deparmentToTitleMap
+
     sortedDepartmentData.forEach((department) => {
       deparmentToTitleMap[department.department_id] = `${department.department}`;
+      console.log(department.department_id);
+      console.log(department.department);
+      console.log(deparmentToTitleMap);
     });
   }
   deparmentToTitleMap['ON-PITCH'] = 'on pitch';
