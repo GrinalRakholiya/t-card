@@ -1,5 +1,6 @@
 // utils
 import { SetUpdateVehicleInterface } from '../components/updateVehicleModal/type.ts';
+import { SetVehicleUpdateInterface } from '../components/vehicleUpdateModel/types.ts';
 import axios from '../utils/axios.ts';
 
 // ----------------------------- type --------------------------------------
@@ -13,7 +14,11 @@ const getVehicle = async (page?: number, limit?: number): Promise<void> => {
   return response.data.data;
 };
 
-const updateVehicle = async (qr: string, data: SetUpdateVehicleInterface): Promise<void> => {
+const updateVehicle = async (
+  qr: string,
+  data: SetUpdateVehicleInterface | SetVehicleUpdateInterface
+): Promise<void> => {
+  console.log(qr, data, 'update vehicle');
   const response = await axios.put(`/vehicles/${qr}`, data);
   return response.data.data;
 };

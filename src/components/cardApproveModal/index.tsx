@@ -19,6 +19,7 @@ const CardApproveModal: React.FC<CardApproveModalProps> = ({ isModalOpen, setIsM
     approved: false,
     parked_at: '',
   });
+
   const departments = useSelector((state: AppState) => state.department.department);
   const [departmentData, setdepartmentData] = useState<DepartmentInterface[]>();
   const [form] = Form.useForm();

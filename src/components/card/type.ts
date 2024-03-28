@@ -28,6 +28,13 @@ export interface CardDetailsInterface {
   current_department_time?: string | null;
   created_at?: string;
   updated_at?: string;
+  keys: number;
+  owner?: number;
+  price?: number;
+  stock_number?: number;
+  miles?: number;
+  mechanical_info?: string;
+  additional_spec_and_info?: string;
 }
 
 export interface CardComponentProps {

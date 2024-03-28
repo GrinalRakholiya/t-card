@@ -8,6 +8,7 @@ import {
   updateVehiclesSuccess,
 } from '../slices/vehiclesSlice.ts';
 import { SetUpdateVehicleInterface } from '../../components/updateVehicleModal/type.ts';
+import { SetVehicleUpdateInterface } from '../../components/vehicleUpdateModel/types.ts';
 
 export const getVehicleAction = async (page?: number, limit?: number): Promise<void> => {
   dispatch(setLoading(true));
@@ -21,7 +22,7 @@ export const getVehicleAction = async (page?: number, limit?: number): Promise<v
 
 export const updateVehicleAction = async (
   qr: string,
-  data: SetUpdateVehicleInterface,
+  data: SetUpdateVehicleInterface | SetVehicleUpdateInterface,
   page?: number,
   limit?: number
 ): Promise<void> => {
