@@ -1,12 +1,14 @@
 import React, { useEffect, useState } from 'react';
-import { Form, Row, Col, Input as AntdInput } from 'antd';
-import Modal from '../modal/index.tsx';
+import { UploadFile } from 'antd/lib/upload/interface';
+import { Form, Row, Col, Input as AntdInput, Modal } from 'antd';
 import Input from '../inputField/index.tsx';
-import { VehicleUpdateModelProps, SetVehicleUpdateInterface } from './types.ts';
 import Button from '../button/index.tsx';
 import { updateVehicleAction } from '../../redux/actions/vehiclesAction.ts';
+import { VehicleUpdateModelProps, SetVehicleUpdateInterface } from './types.ts';
+import ImageUpload from '../imageUpload/index.tsx';
 
 const VehicleUpdateModel: React.FC<VehicleUpdateModelProps> = ({ isModalOpen, setIsModalOpen, vehicleData }) => {
+  const [fileList, setFileList] = useState<UploadFile[]>([]);
   const [nameValue, setNameValue] = useState<SetVehicleUpdateInterface>({
     keys: 0,
     owner: 0,
@@ -15,11 +17,10 @@ const VehicleUpdateModel: React.FC<VehicleUpdateModelProps> = ({ isModalOpen, se
     miles: 0,
     mechanical_info: '',
     additional_spec_and_info: '',
+    image: [],
   });
 
   const { TextArea } = AntdInput;
-
-  const [form] = Form.useForm();
 
   const handleCancel = (): void => {
     setIsModalOpen(false);
@@ -29,6 +30,7 @@ const VehicleUpdateModel: React.FC<VehicleUpdateModelProps> = ({ isModalOpen, se
     try {
       await form.validateFields();
       const formData = form.getFieldsValue();
+
       if (vehicleData) {
         const vehicleUpdateData = {
           keys: formData.keys,
@@ -38,6 +40,7 @@ const VehicleUpdateModel: React.FC<VehicleUpdateModelProps> = ({ isModalOpen, se
           miles: formData.miles,
           mechanical_info: formData.mechanical_info,
           additional_spec_and_info: formData.additional_spec_and_info,
+          image: fileList.map((file) => file.originFileObj!),
         };
         updateVehicleAction(vehicleData.cardDetails.qr_code, vehicleUpdateData);
       }
@@ -46,6 +49,8 @@ const VehicleUpdateModel: React.FC<VehicleUpdateModelProps> = ({ isModalOpen, se
       console.log('error');
     }
   };
+
+  const [form] = Form.useForm();
 
   useEffect(() => {
     if (vehicleData) {
@@ -57,9 +62,8 @@ const VehicleUpdateModel: React.FC<VehicleUpdateModelProps> = ({ isModalOpen, se
         miles: vehicleData.cardDetails?.miles,
         mechanical_info: vehicleData.cardDetails?.mechanical_info,
         additional_spec_and_info: vehicleData.cardDetails?.additional_spec_and_info,
+        image: vehicleData.cardDetails?.image || [],
       });
-    } else {
-      form.resetFields();
     }
   }, [vehicleData, form]);
 
@@ -153,8 +157,11 @@ const VehicleUpdateModel: React.FC<VehicleUpdateModelProps> = ({ isModalOpen, se
             >
               <TextArea showCount maxLength={200} />
             </Form.Item>
+            <Form.Item label="Vehicle Images">
+              <ImageUpload fileList={fileList} onChange={setFileList} />
+            </Form.Item>
 
-            <div className="flex justify-end items-center -mb-5 mt-12 gap-2">
+            <div className="flex justify-end items-center -mb-5 mt-5 gap-2">
               <Button type="primary" htmlType="submit" className="!font-semibold">
                 Update
               </Button>

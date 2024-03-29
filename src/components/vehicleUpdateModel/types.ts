@@ -14,4 +14,5 @@ export interface SetVehicleUpdateInterface {
   miles: number;
   mechanical_info: string;
   additional_spec_and_info: string;
+  image: File[];
 }
