@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from 'react';
 import { Card } from 'antd';
 import moment from 'moment';
-import { FaKey } from 'react-icons/fa'; // Import FaEdit icon
+import { FaKey } from 'react-icons/fa';
 import { AiFillEdit } from 'react-icons/ai';
-
 import { calculateTime } from 'digital-tcard-utils';
 import type { TimeParams } from 'digital-tcard-utils';
 import './cardStyle.scss';
@@ -11,14 +10,14 @@ import CardApproveModal from '../cardApproveModal/index.tsx';
 import { CardComponentProps } from './type.ts';
 import { AppState, useSelector } from '../../redux/store.ts';
 import { SitesInterface } from '../../pages/sites/type.ts';
-import VehicleViewModal from '../vehicleViewModal/index.tsx'; // Update the path accordingly
+import VehicleViewModal from '../vehicleViewModal/index.tsx';
 import VehicleUpdateModel from '../vehicleUpdateModel/index.tsx';
 
 const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
   const sites = useSelector((state: AppState) => state.sites.sites);
   const [color, setColor] = useState<string>('');
   const [cardData, setCardData] = useState<CardComponentProps | undefined>();
-  const [isModalOpen, setIsModalOpen] = useState<string>(''); // State for both modals
+  const [isModalOpen, setIsModalOpen] = useState<string>('');
   const [totalTime, setTotalTime] = useState<string>('');
   const [departmentTotalTime, setDepartmentTotalTime] = useState<string>('');
 
@@ -28,8 +27,8 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
   };
 
   const handleCardClick = (e): void => {
-    e.stopPropagation(); // Prevent propagation to the parent elements
-    setIsModalOpen('view'); // Open the modal
+    e.stopPropagation();
+    setIsModalOpen('view');
   };
   const handleVehicleUpdate = (cardDetails: CardComponentProps): void => {
     setIsModalOpen('vehicleUpdate');
@@ -132,7 +131,7 @@ const CardComponent: React.FC<CardComponentProps> = ({ cardDetails }) => {
       <VehicleUpdateModel
         isModalOpen={isModalOpen === 'vehicleUpdate'}
         setIsModalOpen={setIsModalOpen}
-        viewData={cardDetails}
+        vehicleData={cardData}
       />
       <CardApproveModal isModalOpen={isModalOpen === 'approve'} setIsModalOpen={setIsModalOpen} cardData={cardData} />
     </>

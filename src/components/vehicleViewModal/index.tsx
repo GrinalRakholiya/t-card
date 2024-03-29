@@ -5,7 +5,7 @@ import { DataInterface } from './type.ts';
 
 const VehicleViewModal: React.FC<DataInterface> = ({ viewData, isModalOpen, setIsModalOpen }) => {
   const handleCancel = (): void => {
-    setIsModalOpen(false);
+    setIsModalOpen('');
   };
 
   return (
